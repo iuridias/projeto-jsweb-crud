@@ -9,10 +9,10 @@ Todo projeto foi criado com base no seguinte curso da Alura:
 
 ### Lista de comandos para a aplicação
 Rodar a API:
-ˋˋˋ
+~~~javascript
 npm start
- ˋˋˋ
+~~~
 Rodar o Web Server (Browser-sync):
-ˋˋˋ
+~~~javascript
 npm run browser
- ˋˋˋ
+~~~
