@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "npx json-server --watch db.json",
+    "browser-start": "npx browser-sync start --server --file . --host --port 5000 --startPath /telas/lista_cliente.html",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

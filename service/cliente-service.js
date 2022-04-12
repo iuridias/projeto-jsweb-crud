@@ -1,30 +1,75 @@
-const criaNovaLinha = (nome, email) => {
-  const linhaNovoCliente = document.createElement('tr');
-  const conteudo = `
-    <td class="td" data-td>${nome}</td>
-    <td>${email}</td>
-    <td>
-        <ul class="tabela__botoes-controle">
-            <li><a href="../telas/edita_cliente.html" class="botao-simples botao-simples--editar">Editar</a></li>
-            <li><button class="botao-simples botao-simples--excluir" type="button">Excluir</button></li>
-        </ul>
-    </td>`
-    
-    linhaNovoCliente.innerHTML = conteudo;
-    return linhaNovoCliente;
+// promise antigo -> then....
+// const listaClientes = () => {
+//   return fetch(`http://localhost:3000/profile`)
+//     .then(resposta => {
+//       return resposta.json();
+//     })
+// }
+
+const listaClientes = async () => {
+  const resultado = await fetch(`http://localhost:3000/profile`)
+  if (resultado.ok) {
+    return resultado.json();
+  }
+  throw new Error('Não foi possível listar os clientes.');
 }
 
-const tabela = document.querySelector('[data-tabela]');
+const criaCliente = async (nome, email) => {
+  const resultado = await fetch(`http://localhost:3000/profile`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      nome: nome,
+      email: email
+    })
+  });
+  if (resultado.ok) {
+    return resultado.body;
+  }
+  throw new Error('Não foi possível criar o cliente.');
+}
 
-const http = new XMLHttpRequest();
+const removeCliente = async (id) => {
+  const resultado = await fetch(`http://localhost:3000/profile/${id}`, {
+    method: 'DELETE'
+  });
+  if (!resultado.ok) {
+    throw new Error('Não foi possível remover o cliente.')
+  }
+  return resultado;
+}
 
-http.open('GET', 'http://localhost:3000/profile');
+const detalhaCliente = async (id) => {
+  const resultado = await fetch(`http://localhost:3000/profile/${id}`)
+  if (resultado.ok) {
+    return resultado.json();
+  }
+  throw new Error('Não foi possível detalhar o cliente.')
+}
 
-http.send();
-
-http.onload = () => {
-  const data = JSON.parse(http.response);
-  data.forEach(elemento => {
-    tabela.appendChild(criaNovaLinha(elemento.nome, elemento.email));
+const atualizaCliente = async (id, nome, email) => {
+  const resultado = await fetch(`http://localhost:3000/profile/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      nome: nome,
+      email: email
+    })
   })
+  if (resultado.ok) {
+    return resultado.json();
+  }
+  throw new Error('Não foi possível atualizar o cliente.')
+}
+
+export const clienteService = {
+  listaClientes,
+  criaCliente,
+  removeCliente,
+  detalhaCliente,
+  atualizaCliente
 }
